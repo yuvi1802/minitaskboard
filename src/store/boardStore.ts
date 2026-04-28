@@ -22,11 +22,97 @@ export const useBoardStore = defineStore('board', () => {
   const ready   = ref(false)
 
   /*init */
-  async function init(): Promise<void> {
-    const stored = await loadTasks()
-    tasks.value  = stored
-    ready.value  = true
+ async function init(): Promise<void> {
+  const stored = await loadTasks()
+
+  if (stored.length === 0) {
+    tasks.value = [
+      // TODO (3)
+      {
+        id: uuid(),
+        title: 'Design task schema',
+        description: 'Define Task type and status flow',
+        status: 'todo',
+        priority: 'medium',
+        createdAt: Date.now(),
+      },
+      {
+        id: uuid(),
+        title: 'Set up project',
+        description: 'Initialize Vue + Tailwind + Pinia',
+        status: 'todo',
+        priority: 'low',
+        createdAt: Date.now(),
+      },
+      {
+        id: uuid(),
+        title: 'Plan drag-drop logic',
+        description: 'Understand HTML5 drag events',
+        status: 'todo',
+        priority: 'high',
+        createdAt: Date.now(),
+      },
+
+      // IN PROGRESS (3)
+      {
+        id: uuid(),
+        title: 'Implement drag & drop',
+        description: 'Handle dragstart, dragover, drop',
+        status: 'in-progress',
+        priority: 'high',
+        createdAt: Date.now(),
+      },
+      {
+        id: uuid(),
+        title: 'Build task modal',
+        description: 'Create add/edit UI',
+        status: 'in-progress',
+        priority: 'medium',
+        createdAt: Date.now(),
+      },
+      {
+        id: uuid(),
+        title: 'State management',
+        description: 'Handle updates using Pinia',
+        status: 'in-progress',
+        priority: 'medium',
+        createdAt: Date.now(),
+      },
+
+      // DONE (3)
+      {
+        id: uuid(),
+        title: 'Setup Tailwind UI',
+        description: 'Basic styling and layout',
+        status: 'done',
+        priority: 'low',
+        createdAt: Date.now(),
+      },
+      {
+        id: uuid(),
+        title: 'Add persistence',
+        description: 'Store tasks in IndexedDB',
+        status: 'done',
+        priority: 'medium',
+        createdAt: Date.now(),
+      },
+      {
+        id: uuid(),
+        title: 'Test application',
+        description: 'Verify all features work',
+        status: 'done',
+        priority: 'high',
+        createdAt: Date.now(),
+      },
+    ]
+
+    await saveTasks(tasks.value)
+  } else {
+    tasks.value = stored
   }
+
+  ready.value = true
+}
 
   /* persistence helper */
   
